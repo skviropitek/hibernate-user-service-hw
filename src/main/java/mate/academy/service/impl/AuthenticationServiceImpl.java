@@ -27,19 +27,24 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         User user = new User();
         user.setEmail(email);
-        user.setPassword(password);
+        user.setPassword(password); // Хэш будет сделан в UserService.add
         return userService.add(user);
     }
 
     @Override
     public User login(String email, String password) throws AuthenticationException {
         Optional<User> userOptional = userService.findByEmail(email);
-        User user = userOptional.get();
-        String inputHashPassword = HashUtil.hashPassword(password, user.getSalt());
-
-        if (!user.getPassword().equals(inputHashPassword)) {
+        if (userOptional.isEmpty()) {
             throw new AuthenticationException("Invalid email or password");
         }
+
+        User user = userOptional.get();
+        String hashedInput = HashUtil.hashPassword(password, user.getSalt());
+
+        if (!user.getPassword().equals(hashedInput)) {
+            throw new AuthenticationException("Invalid email or password");
+        }
+
         return user;
     }
 }
