@@ -17,7 +17,7 @@ public class Main {
         try {
             User registeredUser = authService.register("user@example.com", "securePassword");
             System.out.println("User registered: " + registeredUser.getEmail());
-        } catch (RegistrationException e) {
+        } catch (Exception e) {
             System.out.println("Registration failed: " + e.getMessage());
         }
 
@@ -25,7 +25,7 @@ public class Main {
         try {
             User loggedInUser = authService.login("user@example.com", "securePassword");
             System.out.println("User logged in: " + loggedInUser.getEmail());
-        } catch (AuthenticationException e) {
+        } catch (Exception e) {
             System.out.println("Login failed: " + e.getMessage());
         }
     }
